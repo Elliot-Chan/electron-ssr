@@ -12,19 +12,8 @@ let targets
 const extraFiles = []
 
 function release (dir) {
-  switch (platform) {
-    case 'darwin':
-      targets = Platform.MAC.createTarget()
-      extraFiles.push({ from: 'src/lib/proxy_conf_helper', to: './' })
-      break
-    case 'win32':
-      targets = Platform.WINDOWS.createTarget()
-      extraFiles.push({ from: 'src/lib/sysproxy.exe', to: './' })
-      break
-    case 'linux':
-      targets = Platform.LINUX.createTarget()
-  }
-  return builder.build({
+    targets = Platform.LINUX.createTarget()
+    return builder.build({
     targets: targets,
     x64: true,
     ia32: true,
@@ -45,54 +34,10 @@ function release (dir) {
         '!dist/electron/fonts/ionicons--fonts.ttf'
       ],
       extraFiles: extraFiles,
-      dmg: {
-        contents: [
-          {
-            x: 410,
-            y: 150,
-            type: 'link',
-            path: '/Applications'
-          },
-          {
-            x: 130,
-            y: 150,
-            type: 'file'
-          }
-        ]
-      },
-      mac: {
-        icon: 'build/icons/icon.icns',
-        category: 'public.app-category.developer-tools',
-        target: [
-          'zip',
-          'dmg'
-        ],
-        extendInfo: {
-          LSUIElement: 'YES'
-        }
-      },
-      win: {
-        icon: 'build/icons/icon.ico',
-        target: [
-          {
-            target: 'nsis',
-            arch: [
-              'x64',
-              'ia32'
-            ]
-          }
-        ]
-      },
-      nsis: {
-        license: 'LICENSE'
-      },
       linux: {
         icon: 'build/icons',
         category: 'Development',
         target: [
-          'deb',
-          'rpm',
-          'tar.gz',
           'pacman'
         ]
       },
